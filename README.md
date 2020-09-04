@@ -24,15 +24,19 @@ For more control over matching, you can provide a match object instead of a simp
 One or both fields can be provided for fine-grained matching. Unlike the top-level list, the list of path globs provided to `any` and `all` must ALL match against a path for the label to be applied.
 
 The fields are defined as follows:
+
 * `any`: match ALL globs against ANY changed path
 * `all`: match ALL globs against ALL changed paths
 
 A simple path glob is the equivalent to `any: ['glob']`. More specifically, the following two configurations are equivalent:
+
 ```yml
 label1:
 - example1/*
 ```
+
 and
+
 ```yml
 label1:
 - any: ['example1/*']
@@ -77,11 +81,34 @@ frontend:
   all: ['!src/main.js']
 ```
 
+### Additional Example
+
+```yml
+# Add a `new` label for any newly added files
+new:
+  - ./**/*
+  - on: added
+# Add a 'changes' label for any changed files
+changes:
+  - ./**/*
+  - on: modified
+# Add a 'removing' label for any removed files
+removing:
+  - ./**/*
+  - on: removed
+# Add an 'updates' label for any newly added or changed files
+updates:
+  - ./**/*
+  - on:
+    - added
+    - modified
+```
+
 ### Create Workflow
 
 Create a workflow (eg: `.github/workflows/labeler.yml` see [Creating a Workflow file](https://help.github.com/en/articles/configuring-a-workflow#creating-a-workflow-file)) to utilize the labeler action with content:
 
-```
+``` yml
 name: "Pull Request Labeler"
 on:
 - pull_request
